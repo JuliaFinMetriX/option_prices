@@ -15,12 +15,13 @@ var svg = d3.select("body").append("svg")
 var x = d3.time.scale()
     .range([0, width]);
 
-var y = d3.scale.log()
+var y = d3.scale.linear()
     .range([height, 0]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
-    .orient("bottom");
+    .orient("bottom")
+    .tickFormat(d3.time.format("%m-%d"));
 
 var yAxis = d3.svg.axis()
     .scale(y)
@@ -31,34 +32,40 @@ var yAxis = d3.svg.axis()
 var parseDate = d3.time.format("%Y-%m-%d").parse;
 
 var line = d3.svg.line()
-    .defined(function(d) { return !isNaN(d.gdp); })
+    .defined(function(d) { return !isNaN(d.price); })
     .interpolate("basis")
-    .x(function(d) { return x(d.idx); })
-    .y(function(d) { return y(d.gdp); });
+    .x(function(d) { return x(d.Date); })
+    .y(function(d) { return y(d.price); });
 
-var tsdata = d3.csv("/../data/singleExpiry.csv", function (data) {
+var tsdata = d3.csv("../data/chart_data/singleCohortWide.csv", function (data) {
     
-    var countryNames = d3.keys(data[0]).filter(function(key) { return key !== "idx"; });
+    var optionNames = d3.keys(data[0]).filter(function(key) { return key !== "Date"; });
     
     data.forEach(function(d) {
-        d.idx = parseDate(d.idx);
+        d.Date = parseDate(d.Date);
     });
     
-    var tseries = countryNames.map(function(name) {
+    var tseries = optionNames.map(function(name) {
         
-        countryData = data.map(function(d) {
-            return {idx: d.idx, gdp: +d[name]/1000000000, country: name};
+        optionData = data.map(function(d) {
+            if (name[0] == "p") {
+                return {Date: d.Date, price: -d[name], option: name};
+            } else {
+                return {Date: d.Date, price: +d[name], option: name};
+            }
         })
+        
         return {name: name,
-                values: countryData
+                type: name[0],
+                values: optionData
                };
     });
     
-    x.domain(d3.extent(data, function(d) { return d.idx; }));
+    x.domain(d3.extent(data, function(d) { return d.Date; }));
     
     y.domain([
-        d3.min(tseries, function(c) { return d3.min(c.values, function(v) { return v.gdp; }); }),
-        d3.max(tseries, function(c) { return d3.max(c.values, function(v) { return v.gdp; }); })
+        d3.min(tseries, function(c) { return d3.min(c.values, function(v) { return v.price; }); }),
+        d3.max(tseries, function(c) { return d3.max(c.values, function(v) { return v.price; }); })
     ]);
     
     svg.append("g")
@@ -74,38 +81,21 @@ var tsdata = d3.csv("/../data/singleExpiry.csv", function (data) {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("GDP in bn $");
+        .text("price");
     
-    var gdp = svg.selectAll(".gdp")
+    var price = svg.selectAll(".price")
         .data(tseries)
         .enter()
         .append("g")
-        .attr("class", "gdp")
+        .attr("class", "price")
         .append("path")
-        .attr("class", "line")
+        .attr("class", function(d) { return d.type;} )
         .attr("d", function(d) { d.line = this; return line(d.values); });
-    
-    // .on("mouseover", onmouseover)
-    // .on("mouseout", onmouseout);
-    
-    // function onmouseover(d, i) {
-    //     var currClass = d3.select(this).attr("class");
-    //     d3.select(this).attr("class", "current");
-    //     var blurb = '<h2>' + this.__data__.name + '</h2>';
-    //     d3.selectAll("h2").text(this.__data__.name)
-    //     // d3.select("#default-blurb").hide();
-    //     d3.select("#blurb-content").html(blurb);
-    // }
-    
-    // function onmouseout(d, i) {
-    //     d3.select(this).attr("class", "line");
-    //     d3.selectAll("h2").text("World")
-    // }
     
     // voronoi
     var voronoi = d3.geom.voronoi()
-        .x(function(d) { return x(d.idx); })
-        .y(function(d) { return y(d.gdp); })
+        .x(function(d) { return x(d.Date); })
+        .y(function(d) { return y(d.price); })
         .clipExtent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]]);
     
     var voronoiGroup = svg.append("g")
@@ -113,11 +103,11 @@ var tsdata = d3.csv("/../data/singleExpiry.csv", function (data) {
     
     voronoiGroup.selectAll("path")
         .data(voronoi(d3.nest()
-                      .key(function(d) { return x(d.idx) + "," + y(d.gdp); })
+                      .key(function(d) { return x(d.Date) + "," + y(d.price); })
                       .rollup(function(v) { return v[0]; })
                       .entries(d3.merge(tseries.map(function(d) { return d.values; })))
                       .map(function(d) { return d.values; })
-                      .filter(function(d) { return !isNaN(d.gdp) })))
+                      .filter(function(d) { return !isNaN(d.price) })))
         .enter().append("path")
         .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
         .datum(function(d) { return d.point; })
@@ -125,22 +115,22 @@ var tsdata = d3.csv("/../data/singleExpiry.csv", function (data) {
         .on("mouseout", mouseout);
     
     function mouseover(d) {
-        svg.selectAll("path").filter(function(c) { return c.name == d.country})
-            .attr("class", "city--hover")
-        d3.selectAll("h2").text(d.country)
-        // gdp[0].filter(function(c) { return c.__data__.name == d.country })
-        //     d3.select(d.country.line).classed("city--hover", true);
-        //     d.country.line.parentNode.appendChild(d.country.line);
-        //     // focus.attr("transform", "translate(" + x(d.date) + "," + y(d.value) + ")");
-        //     // focus.select("text").text(d.city.name);
+        svg.selectAll("path").filter(function(c) { return c.name == d.option})
+            .attr("class", function(d) {
+                if (d.name[0] == "c") {
+                    return "line--hover-c";
+                } else if (d.name[0] == "p") {
+                    return "line--hover-p";
+                } else {
+                    return "line--hover-d";
+                }
+            })
+        d3.selectAll("h2").text(d.option)
     }
     
     function mouseout(d) {
-        svg.selectAll("path").filter(function(c) { return c.name == d.country})
-            .attr("class", "line")
-        d3.selectAll("h2").text("World")
-        // d3.select(d.country.line).classed("city--hover", false);
-        // focus.attr("transform", "translate(-100,-100)");
+        svg.selectAll("path").filter(function(c) { return c.name == d.option})
+            .attr("class", function(d) { return d.type;} )
     }
     
     
