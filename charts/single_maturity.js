@@ -1,9 +1,9 @@
 // define margins
-var margin = {top: 20, right: 80, bottom: 30, left: 150};
+var margin = {top: 0, right: 10, bottom: 30, left: 60};
 
 // graphics size without axis
-var width = 960 - margin.left - margin.right;
-var height = 500 - margin.top - margin.bottom;
+var width = 760 - margin.left - margin.right;
+var height = 400 - margin.top - margin.bottom;
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
