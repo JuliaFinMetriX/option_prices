@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+        <meta name="author" content="Christian Groll" />
+            <meta name="dcterms.date" content="2015-03-19" />
+        <title>Option prices: stylized facts</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="reveal.js/css/reveal.css"/>
+    <style type="text/css">code{white-space: pre;}</style>
+                <link rel="stylesheet" href="reveal.js/css/theme/league.css" id="theme">
+        <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+      if( window.location.search.match( /print-pdf/gi ) ) {
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = 'reveal.js/css/print/pdf.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+    </script>
+    <!--[if lt IE 9]>
+        <script src="reveal.js/lib/js/html5shiv.js"></script>
+        <![endif]-->
+            
+    <!-- include local MathJax -->
+    <!-- <script type="text/x-mathjax-config"> -->
+    <!--   MathJax.Hub.Config({ -->
+    <!--   extensions: ["tex2jax.js"], -->
+    <!--   jax: ["input/TeX","output/HTML-CSS"], -->
+    <!--   tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}}); -->
+    <!-- </script> -->
+    <script type="text/javascript" src="MathJax/MathJax.js"></script>
+    
+    <!-- include local D3 charts -->
+    <!-- <script src="d3/d3.js" charset="utf-8"> -->
+    <!-- </script> -->
+    
+    
+  </head>
+  <body>
+        <div class="reveal">
+      <div class="slides">
+        
+                <section>
+          <h1 class="title">Option prices: stylized facts</h1>
+                              <h2 class="author">Christian Groll</h2>
+                    <h3 class="date">March 19, 2015</h3>
+        </section>
+                        
+        <section><section id="stylized-facts" class="titleslide slide level1"><h1>Stylized facts</h1></section><section id="section" class="slide level2">
+        <h1></h1>
+        <ul>
+        <li>a collection of option price graphics</li>
+        <li>graphics are embedded as iframes to not intermix separate style sheets</li>
+        </ul>
+        </section><section id="section-1" class="slide level2">
+        <h1></h1>
+        <p>This is the second slide</p>
+        </section><section id="section-2" class="slide level2">
+        <h1></h1>
+        <p>first graphics:</p>
+        <iframe id="ifrm" src="../charts/index.html" onload="setIframeHeight(this.id)" allowtransparency="true" style="background: white;">
+        </iframe>
+        </section><section id="section-3" class="slide level2">
+        <h1></h1>
+        <p>second graphics: <iframe allowtransparency="true" style="background: white;" width="1200" height="600" src="../charts/index.html" frameborder="0" allowfullscreen></iframe></p>
+        </section></section>
+      </div>
+    </div>
+    
+    
+    <script src="reveal.js/lib/js/head.min.js"></script>
+    <script src="reveal.js/js/reveal.js"></script>
+    
+    <script>
+      
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+      theme: 'league', // available themes are in /css/theme
+      transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+      
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+      { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      //          { src: 'reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; }, }
+      //          { src: 'reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]});
+    </script>
+        
+    <!-- code to automatically resize iframe content-->
+    <script language="JavaScript">
+      
+      function getDocHeight(doc) {
+      doc = doc || document;
+      // stackoverflow.com/questions/1145850/
+      var body = doc.body, html = doc.documentElement;
+      var height = Math.max( body.scrollHeight, body.offsetHeight, 
+      html.clientHeight, html.scrollHeight, html.offsetHeight );
+      return height + 100;
+      }
+      
+      function getDocWidth(doc) {
+      doc = doc || document;
+      // stackoverflow.com/questions/1145850/
+      var body = doc.body, html = doc.documentElement;
+      var width = Math.max( body.scrollWidth, body.offsetWidth, 
+      html.clientWidth, html.scrollWidth, html.offsetWidth );
+      return width + 100;
+      }
+      
+      function setIframeHeight(id) {
+      var ifrm = document.getElementById(id);
+      var doc = ifrm.contentDocument? ifrm.contentDocument: 
+      ifrm.contentWindow.document;
+      ifrm.style.visibility = 'hidden';
+      ifrm.style.height = "10px"; // reset to minimal height ...
+      // IE opt. for bing/msn needs a bit added or scrollbar appears
+      ifrm.style.height = getDocHeight( doc ) + 4 + "px";
+      ifrm.style.width = getDocWidth( doc ) + 4 + "px";
+      ifrm.style.visibility = 'visible';
+      }
+    </script>
+    
+  </body>
+</html>
