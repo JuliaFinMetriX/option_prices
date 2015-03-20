@@ -62,12 +62,18 @@
         <p>This is the second slide</p>
         </section><section id="section-2" class="slide level2">
         <h1></h1>
-        <p>first graphics:</p>
-        <iframe id="ifrm" src="../charts/index.html" onload="setIframeHeight(this.id)" allowtransparency="true" style="background: white;">
-        </iframe>
+        <p>slide again</p>
         </section><section id="section-3" class="slide level2">
         <h1></h1>
-        <p>second graphics: <iframe allowtransparency="true" style="background: white;" width="1200" height="600" src="../charts/index.html" frameborder="0" allowfullscreen></iframe></p>
+        <p>slide again again</p>
+        </section><section id="section-4" class="slide level2">
+        <h1></h1>
+        <p>slide also</p>
+        </section><section id="section-5" class="slide level2">
+        <h1></h1>
+        <p>first graphics:</p>
+        <iframe id="ifrm" src="../charts/singleCohort.html" onload="setIframeSize(this.id)" allowtransparency="true" style="background: white;">
+        </iframe>
         </section></section>
       </div>
     </div>
@@ -81,6 +87,9 @@
       // Full list of configuration options available here:
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
+      margin: 0.01, <!-- if iframe is to high, this will also reduce -->
+      <!-- its width, since aspect ratio is preserved. hence, height should -- -->
+      <!-- have as small margin as possible. -\-> -->
       controls: true,
       progress: true,
       history: true,
@@ -97,8 +106,9 @@
       //          { src: 'reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
       ]});
     </script>
-        
+    
     <!-- code to automatically resize iframe content-->
+    <!-- http://www.dyn-web.com/tutorials/iframes/height/ -->
     <script language="JavaScript">
       
       function getDocHeight(doc) {
@@ -119,7 +129,7 @@
       return width + 100;
       }
       
-      function setIframeHeight(id) {
+      function setIframeSize(id) {
       var ifrm = document.getElementById(id);
       var doc = ifrm.contentDocument? ifrm.contentDocument: 
       ifrm.contentWindow.document;

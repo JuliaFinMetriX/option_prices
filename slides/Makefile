@@ -1,36 +1,17 @@
-# From https://github.com/kjhealy/pandoc-templates/blob/master/examples/Makefile
-# thanks to Kieran Healy
+TMPL_PREFIX = pandoc_settings/templates
+#TMPLATES = $(TMPL_PREFIX)/revealjs.template $(TMPL_PREFIX)/beamer.template
+TMPLATES = $(TMPL_PREFIX)/revealjs.template
 
-## Markdown extension (e.g. md, markdown, mdown).
-MEXT = md
+slides.html: present.md Makefile $(TMPLATES)
+	pandoc -t revealjs -s --template=pandoc_settings/templates/revealjs.template -V theme=league -o slides.html present.md
 
-## 	All markdown files in the working directory
-# SRC = $(wildcard *.$(MEXT))
-SRC = present.md
+slides.pdf:	present.md Makefile $(TMPLATES)
+	pandoc -t beamer -V theme:Warsaw -s --latex-engine=pdflatex --template=pandoc_settings/templates/beamer.template -o slides.pdf present.md
 
-## Location of Pandoc support files.
-PREFIX = pandoc_settings
-
-## Location of your working bibliography file
-BIB = refs.bib
-
-## CSL stylesheet (located in the csl folder of the PREFIX directory).
-CSL = apsa
-
-REVEAL=$(SRC:.md=.slides.html)
-
-all: $(REVEAL)
-
-html:	clean $(REVEAL)
-
-%.slides.html:	%.md
-	pandoc -t revealjs -s --template=$(PREFIX)/templates/revealjs.template -V theme=league -o $@ $<
-
-# %.slides.html:	%.md
-# 	pandoc -t revealjs -s --toc-depth=1 --toc --template=$(PREFIX)/templates/revealjs.template --filter pandoc-citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(BIB) -V theme=league -o $@ $<
+all: slides.html slides.pdf
 
 clean:
-	rm -f *.slides.html
+	rm -f slides.pdf slides.html
 
 again:
 	make clean
