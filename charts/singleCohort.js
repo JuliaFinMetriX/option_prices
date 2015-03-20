@@ -2,7 +2,7 @@
 var margin = {top: 0, right: 10, bottom: 30, left: 60};
 
 // graphics size without axis
-var width = 760 - margin.left - margin.right;
+var width = 650 - margin.left - margin.right;
 var height = 400 - margin.top - margin.bottom;
 
 var svg = d3.select("body").append("svg")
