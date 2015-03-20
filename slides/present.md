@@ -15,11 +15,20 @@
 This is the second slide
 
 ## 
+slide again
 
+## 
+
+slide again again
+
+##
+
+slide also
+
+##
 first graphics: 
 
-<iframe id="ifrm" src="../charts/index.html" 
-onload="setIframeHeight(this.id)"
+<iframe id="ifrm" src="../charts/singleCohort.html" 
+onload="setIframeSize(this.id)"
 allowtransparency="true"
 style="background: white;"></iframe>
-
