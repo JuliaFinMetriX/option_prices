@@ -109,15 +109,3 @@ head(cohortParams)
 
 head(addObs)
 
-
-# ### Session info
-
-# In[17]:
-
-versioninfo()
-
-
-# In[18]:
-
-Pkg.status()
-
