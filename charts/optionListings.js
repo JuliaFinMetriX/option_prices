@@ -2,8 +2,8 @@
 var margin = {top: 0, right: 10, bottom: 30, left: 60};
 
 // graphics size without axis
-var width = 900 - margin.left - margin.right;
-var height = 400 - margin.top - margin.bottom;
+var width = 1800 - margin.left - margin.right;
+var height = 800 - margin.top - margin.bottom;
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -32,7 +32,7 @@ var yAxis = d3.svg.axis()
 var parseDate = d3.time.format("%Y-%m-%d").parse,
 bisectDate = d3.bisector(function(d) { return d.values[0].Date; }).left; 
 
-var tsdata = d3.csv("../data/chart_data/listingData_short.csv", function (d) {
+var tsdata = d3.csv("../data/chart_data/listingData.csv", function (d) {
     
 	 return {
 		  Date: new Date(d.Date),
