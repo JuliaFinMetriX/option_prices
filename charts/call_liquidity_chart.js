@@ -11,16 +11,15 @@ var svg = d3.select("body").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var colors = ["#6363FF", "#6373FF", "#63A3FF", "#63E3FF", "#63FFFB", "#63FFCB",
-               "#63FF9B", "#63FF6B", "#7BFF63", "#BBFF63", "#DBFF63", "#FBFF63", 
-               "#FFD363", "#FFB363", "#FF8363", "#FF7363", "#FF6364"];
+var liquMeasure = "Vol";
 
-colors = ['black', 'red', 'DarkGray', 'DimGray', 'Gray', 'blue', 'green'];
-// colors = ['black', 'blue', 'red'];
+var nColors = 4;
+var colors = colorbrewer.YlOrRd[nColors]
+var quantize = d3.scale.quantile().range(d3.range(nColors));
 
-var heatmapColor = d3.scale.linear()
+// var heatmapColor = d3.scale.linear()
 	 // .domain(d3.range(0, 1, 1.0 / (colors.length - 1)))
-	 .range(colors);
+	 // .range(colors);
 
 // axes scales
 var x = d3.time.scale()
@@ -73,10 +72,11 @@ var tsdata = d3.csv("../data/chart_data/putLiquidityData.csv", function (d) {
 		  DAX: +d.DAX,
 		  Ask: +d.Ask,
 		  Bid: +d.Bid,
-		  // OI: +d.Open_Interest,
-		  OI: +d.OiRanks,
-		  Vol: +d.VolRanks
-		  // Vol: +d.Volume
+		  OI: +d.Open_Interest,
+		  OIRanks: +d.OiRanks,
+		  Vol: +d.Volume,
+		  VolRanks: +d.VolRanks,
+		  DeltaOI: +d.DeltaOI
 	 };
 }, function(error, tsdata) {
 	 
@@ -87,10 +87,12 @@ var tsdata = d3.csv("../data/chart_data/putLiquidityData.csv", function (d) {
 												 d3.extent(tsdata, function(d) { return d.Expiry; })[1]])]);
 	 y.domain([0, expExtend[1]]);
 
-	 heatmapColor.domain(d3.extent(tsdata, function(d) { return d.Vol; }));
+	 quantize.domain( tsdata.map(function(d) { return d[liquMeasure]; } ));
 
-	 var c = d3.scale.linear().domain(d3.extent(tsdata, function(d) { return d.Vol; })).range([0, 1]);
-	 // var c = d3.scale.linear().domain([0, 20000]).range([0, 1]);
+	 d3.select("select").on("change", function() {
+		  liquMeasure = this.value;
+		  quantize.domain( tsdata.map(function(d) { return d[liquMeasure]; } ));
+	 });
 
 	 var uniqueDates = d3.nest()
 		  .key(function(d) { return [d.Date]; })
@@ -233,13 +235,12 @@ var tsdata = d3.csv("../data/chart_data/putLiquidityData.csv", function (d) {
 		  allSelCircles = [];
 		  currentCircleColors = [];
 		  uniqueDates[dateInd].values.forEach(function(d, i) { allSelCircles[i] = d.circleRef;
-																				 if (d.Vol == 0) {
-																					  currentCircleColors[i] = '#00FF00';
+																				 if (d[liquMeasure] == 0) {
+																					  currentCircleColors[i] = 'green';
 																				 } else {
-																					  currentCircleColors[i] = heatmapColor(d.Vol);
+																					  currentCircleColors[i] = colors[quantize(d[liquMeasure])];
 																				 }
 																			  });
-																			  // currentCircleColors[i] = heatmapColor(c(d.Vol))});
 																				 
 
 		  currSelCircles = d3.selectAll(allSelCircles);

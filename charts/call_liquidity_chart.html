@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+
 <style>
   body {
   font: 16px sans-serif;
@@ -65,13 +66,25 @@
   .focus text {
   font: 10px sans-serif;
   }
-  
+
 </style>
 <body>
   <h2>Option liquidity: call options</h2>
   <script src="../slides/d3/d3.js" charset="utf-8">
   </script>
+  <script src="../slides/d3/lib/colorbrewer/colorbrewer.js" charset="utf-8">
+  </script>
 
+  <div class="hint">use the menu to change the color scale</div>
+  <div><select>
+      <optgroup label="Choose your liquidity measure">
+        <option value="Vol">Volume</option>
+        <option value="VolRanks">Scaled volume</option>
+        <option value="OI">Open interest</option>
+        <option value="DeltaOI">Open interest changes</option>
+      </optgroup>
+  </select></div>
+  
   <script src="call_liquidity_chart.js">
   </script>  
 </body>
