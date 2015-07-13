@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  body {
+  font: 16px sans-serif;
+  }
+  
+  .axis path,
+  .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+  }
+  
+  .x.axis path {
+  <!-- display: none; -->
+  }
+
+  .optionDot {
+  fill: none;
+  }
+
+  .optionDot.vis {
+  <!-- fill: #000; -->
+  }
+
+  .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2.5px;
+  }
+
+  .background {
+  fill: rgb(229, 229, 229);
+  fill-opacity: 1;
+  }
+
+  .grid .tick {
+  stroke: rgb(255, 255, 255);
+  stroke-opacity: 1;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+  }
+  
+  .grid path {
+  stroke-width: 0;
+  }
+
+  .overlay {
+  fill: none;
+  pointer-events: all;
+  }
+  
+  .focus circle {
+  fill: none;
+  stroke: steelblue;
+  }
+
+  .horzLine {
+  fill: none;
+  stroke: red;
+  stroke-width: 2.5px;
+  }
+
+  .focus text {
+  font: 10px sans-serif;
+  }
+  
+</style>
+<body>
+  <h2>Option liquidity: call options</h2>
+  <script src="../slides/d3/d3.js" charset="utf-8">
+  </script>
+
+  <script src="call_liquidity_chart.js">
+  </script>  
+</body>
+</html>
