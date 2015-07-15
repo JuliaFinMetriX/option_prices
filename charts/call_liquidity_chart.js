@@ -1,9 +1,9 @@
 // define margins
-var margin = {top: 0, right: 10, bottom: 30, left: 60};
+var margin = {top: 10, right: 10, bottom: 30, left: 60};
 
 // graphics size without axis
-var width = 1800 - margin.left - margin.right;
-var height = 800 - margin.top - margin.bottom;
+var width = 1600 - margin.left - margin.right;
+var height = 700 - margin.top - margin.bottom;
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -16,6 +16,9 @@ var liquMeasure = "Vol";
 var nColors = 4;
 var colors = colorbrewer.YlOrRd[nColors]
 var quantize = d3.scale.quantile().range(d3.range(nColors));
+
+// init index of current date 
+var dateInd = 0;
 
 // var heatmapColor = d3.scale.linear()
 	 // .domain(d3.range(0, 1, 1.0 / (colors.length - 1)))
@@ -139,7 +142,18 @@ var tsdata = d3.csv("../data/chart_data/putLiquidityData.csv", function (d) {
 	 var yAxisWithoutTitle = svg.append("g")
 		  .attr("class", "y axis")
 		  .call(yAxis);
-	 
+
+	 // group tsdata by Date
+	 var uniqueDates = d3.nest()
+		  .key(function(d) { return d.Date; })
+		  .entries(tsdata);
+
+	 // append DAX line
+	 svg.append("path")
+        .datum(uniqueDates)
+        .attr("class", "line")
+        .attr("d", DAXline);
+
 	 var circles = svg.selectAll(".optionDot")
 		  .data(nestedData)
 		  .enter()
@@ -159,10 +173,6 @@ var tsdata = d3.csv("../data/chart_data/putLiquidityData.csv", function (d) {
 		  });
 	 });
 
-	 // group tsdata by Date
-	 var uniqueDates = d3.nest()
-		  .key(function(d) { return d.Date; })
-		  .entries(tsdata);
 	 
 	 svg.append("rect")                                     // **********
         .attr("width", width)                              // **********
@@ -171,7 +181,10 @@ var tsdata = d3.csv("../data/chart_data/putLiquidityData.csv", function (d) {
         .style("pointer-events", "all")
         .on("mouseover", function() { focus.style("display", null); })
         .on("mouseout", function() { focus.style("display", "none"); })
-        .on("mousemove", mousemove);                       // **********
+        .on("mousemove", mousemove);
+
+	 d3.select(window)
+	 	  .on("keydown", keydown);
 
 	 	 yAxisWithoutTitle.append("text")
 		  .attr("transform", "rotate(-90)")
@@ -179,11 +192,6 @@ var tsdata = d3.csv("../data/chart_data/putLiquidityData.csv", function (d) {
 		  .attr("dy", ".71em")
 		  .style("text-anchor", "end")
 		  .text("price");
-
-	 svg.append("path")
-        .datum(uniqueDates)
-        .attr("class", "line")
-        .attr("d", DAXline);
 
 	 var focus = svg.append("g")
         .attr("class", "focus")
@@ -203,6 +211,8 @@ var tsdata = d3.csv("../data/chart_data/putLiquidityData.csv", function (d) {
 		  // .attr("x2", x.range()[1])
 		  // .attr("y2", y.range()[0]/2)
 	 	  .attr("class", "horzLine");
+
+	 redraw();
 	 
     function mousemove() {                                 // **********
         var x0 = x.invert(d3.mouse(this)[0]),
@@ -216,6 +226,27 @@ var tsdata = d3.csv("../data/chart_data/putLiquidityData.csv", function (d) {
 				d1 = uniqueDates[i],                                  // **********
 				dateInd = x(x0) - x(d0.values[0].Date) > x(d1.values[0].Date) - x(x0) ? i : (i-1);
 		  }
+		  redraw();
+	 }
+
+	 function keydown() {
+		  console.log("keydown event!!")
+		  if (!dateInd) return;
+		  switch (d3.event.keyCode) {
+		  case 49: {
+				dateInd = dateInd - 1;
+				redraw();
+				break;
+		  }// backspace
+		  case 50: { // delete
+				dateInd = dateInd + 1;
+				redraw();
+				break;
+		  }
+  }
+	 };
+	 
+	 function redraw() {
 
 		  // DAX tooltip
 		  focus.attr("transform", "translate(" + x(uniqueDates[dateInd].values[0].Date) + "," + y(uniqueDates[dateInd].values[0].DAX) + ")");
@@ -237,16 +268,18 @@ var tsdata = d3.csv("../data/chart_data/putLiquidityData.csv", function (d) {
 		  uniqueDates[dateInd].values.forEach(function(d, i) { allSelCircles[i] = d.circleRef;
 																				 if (d[liquMeasure] == 0) {
 																					  currentCircleColors[i] = 'green';
-																				 } else {
+																				 } else if (d[liquMeasure] < 0) {
+																					  currentCircleColors[i] = 'black';
+																				 }
+																				 else {
 																					  currentCircleColors[i] = colors[quantize(d[liquMeasure])];
 																				 }
 																			  });
 																				 
-
 		  currSelCircles = d3.selectAll(allSelCircles);
 		  // currSelCircles.classed("vis", true);
-		  currSelCircles.attr("fill", function(d, i) { return currentCircleColors[i]; })
-		  
+		  currSelCircles.attr("fill", function(d, i) { return currentCircleColors[i]; });
+
 	 }
 	 
 });
