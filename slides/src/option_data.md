@@ -130,35 +130,184 @@ support SVG</object>
 
 # Option prices
 
-## No arbitrage bounds
+### Call payoff
 
-see [@rv_hull_2009_options_futures_other_derivatives]
+![](../../unrepl_pics/call_payoff.png)
 
-### Upper bounds 
+### Put payoff
 
-- call:
+![](../../unrepl_pics/put_payoff.png)
+
+## No arbitrage bounds 
+
+following [@rv_hull_2009_options_futures_other_derivatives]
+
+
+## Upper bound call option
+
+###
+
+- the payoff of a call option is always smaller than the value of the
+  underlying 
+
+. . .
+
+<center><img alt="call upper bound" src="../../unrepl_pics/call_up_bound.png"
+style="height: 400px;"/></center>
+
+###
+
+$\Rightarrow$ present value of a call option must be smaller than
+present price of the underlying
+
+. . .
 
 \begin{equation*}
 c\leq S_{0}
 \end{equation*}
 
-- put: 
-	- can not be worth more than $K$ at maturity
-	- $\Rightarrow$ worth less than the present value of $K$ today
+
+## Upper bound put option
+
+###
+
+- payoff always smaller than $K$ at maturity
+
+. . .
+
+<center><img alt="call upper bound" src="../../unrepl_pics/put_up_bound.png"
+style="height: 400px;"/></center>
+
+
+###
+
+
+$\Rightarrow$ worth less than the present value of $K$ today
+
+. . .
 
 \begin{equation*}
 p \leq Ke^{-rT}
 \end{equation*}
 
-### Lower bound: call
+## Lower bound call option
 
-**Lower bounds**:
+###
 
-- replicating portfolio: 
-	- European call option, strike $K$, expiry $T$
-	- zero-coupon bond providing payoff $K$ at $T$
+Portfolio: 
 
-- one share of stock
+- zero-coupon bond providing payoff $K$ at $T$
+- European call option, strike $K$, expiry $T$
+
+###
+
+<center><img alt="call upper bound" src="../../unrepl_pics/call_low_bound_1.png"
+style="height: 400px;"/></center>
+
+
+###
+
+Joint portfolio payoff...
+
+<center><img alt="call upper bound" src="../../unrepl_pics/call_low_bound_2.png"
+style="height: 400px;"/></center>
+
+###
+
+... is always larger than payoff of single stock:
+
+<center><img alt="call upper bound" src="../../unrepl_pics/call_low_bound_3.png"
+style="height: 400px;"/></center>
+
+
+###
+
+\begin{align*}
+Ke^{-rT} + c &\geq S_{0} & \Leftrightarrow\\
+c&\geq S_{0} - Ke^{-rT}&
+\end{align*}
+
+. . .
+
+**lower bound**:
+
+\begin{equation*}
+c = \max\{S_{0} - Ke^{-rT}, 0\}
+\end{equation*}
+
+## Upper bound call option
+
+###
+
+Portfolio: 
+
+- single share of underlying
+- European put option, strike $K$, expiry $T$
+
+<center><img alt="call upper bound" src="../../unrepl_pics/put_low_bound_1.png"
+style="height: 400px;"/></center>
+
+###
+
+Joint portfolio payoff ...
+
+<center><img alt="call upper bound" src="../../unrepl_pics/put_low_bound_2.png"
+style="height: 400px;"/></center>
+
+###
+
+... is always larger than payoff of zero-coupon bond providing payoff
+$K$ at $T$
+
+<center><img alt="call upper bound" src="../../unrepl_pics/put_low_bound_3.png"
+style="height: 400px;"/></center>
+
+###
+
+\begin{align*}
+p + S_{0}&\geq Ke^{-rT} & \Leftrightarrow \\
+p &\geq Ke^{-rT} - S_{0}
+\end{align*}
+
+. . .
+
+**lower bound**:
+
+\begin{equation*}
+p = \max\{Ke^{-rT} - S_{0}, 0\}
+\end{equation*}
+
+### No arbitrage bounds
+
+
+\begin{align*}
+\max\{Ke^{-rT} - S_{0}, 0\} \leq &p \leq Ke^{-rT}\\
+\max\{S_{0} - Ke^{-rT}, 0\} \leq &c \leq S_{0}
+\end{align*}
+
+## Put-Call parity
+
+# Black-Scholes option theory
+
+## Black-Scholes formula
+
+### 
+
+\begin{equation*}
+B(S,K,T,r,\sigma) = dkdkd
+\end{equation*}
+
+
+## Greeks
+
+### Non-stationarity of option prices
+
+option price must be modelled as function of underlying:
+
+\begin{equation*}
+c = f(\bf{X})
+\end{equation*}
+
 
 ###
 
