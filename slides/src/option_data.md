@@ -279,7 +279,6 @@ p = \max\{Ke^{-rT} - S_{0}, 0\}
 
 ### No arbitrage bounds
 
-
 \begin{align*}
 \max\{Ke^{-rT} - S_{0}, 0\} \leq &p \leq Ke^{-rT}\\
 \max\{S_{0} - Ke^{-rT}, 0\} \leq &c \leq S_{0}
